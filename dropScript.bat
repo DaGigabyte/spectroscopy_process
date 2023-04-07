@@ -1,0 +1,2 @@
+py "plotFromCSV.py" %*
+pause
