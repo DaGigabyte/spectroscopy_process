@@ -5,7 +5,7 @@ bps = 115200
 timeOut = 5
 ser = serial.Serial(portN, bps, timeout=timeOut)
 print(ser.name)
-sub_dir = "Samples"
+sub_dir = "5_LEDs_Samples"
 try:
     os.mkdir(sub_dir)
 except Exception:
