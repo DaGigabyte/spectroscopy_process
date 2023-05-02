@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn import decomposition, preprocessing
+from sklearn import decomposition, preprocessing, pipeline
 
 def pca_plot(data1, data2, figure_num = 1, title_name = "Default", standard_scaler = False):
     X = np.vstack((data1, data2))
@@ -78,10 +78,5 @@ pca_plot(arr1_offseted, arr2_offseted, figure_num = 1, title_name = "Original")
 pca_plot(arr1_offseted+100, arr2_offseted, figure_num = 20, title_name = "Shifted")
 pca_plot(arr1_offseted, arr2_offseted, figure_num = 2, title_name = "Normalised all", standard_scaler=True)
 pca_2dplot(arr1_offseted, arr2_offseted, figure_num = 101, title_name = "Normalised all", standard_scaler=True)
-sc = preprocessing.StandardScaler()
-arr1_offseted = sc.fit_transform(arr1_offseted)
-arr2_offseted = sc.fit_transform(arr2_offseted)
-pca_plot(arr1_offseted, arr2_offseted, figure_num = 3, title_name = "Normalised separately")
-
 
 plt.show()
