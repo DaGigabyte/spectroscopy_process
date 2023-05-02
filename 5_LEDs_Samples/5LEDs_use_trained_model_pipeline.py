@@ -1,14 +1,18 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn import decomposition, preprocessing
+from sklearn import decomposition, preprocessing, pipeline, svm, model_selection
+
+def interpretSamples(data1, data2):
+    X = np.vstack((data1, data2))
+    Y = np.hstack((np.repeat(1, data1.shape[0]), np.repeat(5, data2.shape[0])))
+    return X, Y
 
 def pca_plot(data1, data2, figure_num = 1, title_name = "Default", standard_scaler = False):
-    X = np.vstack((data1, data2))
+    X, Y = interpretSamples(data1=data1, data2=data2)
     if standard_scaler:
         sc = preprocessing.StandardScaler()
         X = sc.fit_transform(X)
     sample_pair = [("PET", 1), ("PP", 5)]
-    Y = np.hstack((np.repeat(1, data1.shape[0]), np.repeat(5, data2.shape[0])))
 
     fig = plt.figure(figure_num, figsize=(4, 3))
     fig.suptitle(title_name)
@@ -35,12 +39,11 @@ def pca_plot(data1, data2, figure_num = 1, title_name = "Default", standard_scal
     # ax.zaxis.set_ticklabels([])
 
 def pca_2dplot(data1, data2, figure_num = 1, title_name = "Default", standard_scaler = False):
-    X = np.vstack((data1, data2))
+    X, Y = interpretSamples(data1=data1, data2=data2)
     if standard_scaler:
         sc = preprocessing.StandardScaler()
         X = sc.fit_transform(X)
     sample_pair = [("PET", 1), ("PP", 5)]
-    Y = np.hstack((np.repeat(1, data1.shape[0]), np.repeat(5, data2.shape[0])))
 
     fig = plt.figure(figure_num, figsize=(4, 3))
     fig.suptitle(title_name)
@@ -73,10 +76,16 @@ for ar in arr2_offseted:
     ar -= ar[-1]
 
 
-pca_2dplot(arr1_offseted, arr2_offseted, figure_num = 100, title_name = "Original")
-pca_plot(arr1_offseted, arr2_offseted, figure_num = 1, title_name = "Original")
-pca_plot(arr1_offseted+100, arr2_offseted, figure_num = 20, title_name = "Shifted")
-pca_plot(arr1_offseted, arr2_offseted, figure_num = 2, title_name = "Normalised all", standard_scaler=True)
-pca_2dplot(arr1_offseted, arr2_offseted, figure_num = 101, title_name = "Normalised all", standard_scaler=True)
+X, Y = interpretSamples(arr1_offseted, arr2_offseted)
+X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X, Y, train_size=0.005, random_state=42)
+pipe = pipeline.Pipeline([('scaler', preprocessing.StandardScaler()), ('pca', decomposition.PCA(n_components=2)), ('svc', svm.SVC(gamma='auto', kernel='linear'))])
+pipe.fit(X_train, Y_train)
+print(pipe.score(X_test, Y_test))
 
-plt.show()
+# pca_2dplot(arr1_offseted, arr2_offseted, figure_num = 100, title_name = "Original")
+# pca_plot(arr1_offseted, arr2_offseted, figure_num = 1, title_name = "Original")
+# pca_plot(arr1_offseted+100, arr2_offseted, figure_num = 20, title_name = "Shifted")
+# pca_plot(arr1_offseted, arr2_offseted, figure_num = 2, title_name = "Normalised all", standard_scaler=True)
+# pca_2dplot(arr1_offseted, arr2_offseted, figure_num = 101, title_name = "Normalised all", standard_scaler=True)
+
+# plt.show()
