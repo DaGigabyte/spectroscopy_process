@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import decomposition, preprocessing, pipeline, svm, model_selection
+import joblib
 
 def interpretSamples(data1, data2):
     X = np.vstack((data1, data2))
@@ -70,14 +71,22 @@ arr1_pruned = arr1[:, np.array([0, 2, 3, 6, 8])]
 arr2 = np.genfromtxt('PP_unknown_5LEDs_vertical.csv', delimiter=',')
 # arr2_pruned = arr2[:, np.array([1, 4, 5, 7, 8])]
 arr2_pruned = arr2[:, np.array([0, 2, 3, 6, 8])]
+empty_arr = np.genfromtxt('Empty_static.csv', delimiter=',')
+empty_pruned = empty_arr[:, np.array([0, 2, 3, 6, 8])]
 
 
 X, Y = interpretSamples(arr1_pruned, arr2_pruned)
-X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X, Y, train_size=0.3, random_state=40)
-pipe = pipeline.Pipeline([('scaler', preprocessing.StandardScaler()), ('pca', decomposition.PCA(n_components=2)), ('svc', svm.SVC(gamma='auto', kernel='linear'))])
+X = np.vstack((X, empty_pruned))
+Y = np.hstack((Y, np.repeat(0, empty_pruned.shape[0])))
+X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X, Y, train_size=0.3, random_state=42)
+pipe = pipeline.Pipeline([('scaler', preprocessing.StandardScaler()), ('pca', decomposition.PCA(n_components=2)), ('svc', svm.SVC(gamma='auto', kernel='linear', probability=True))])
 pipe.fit(X_train, Y_train)
 print(pipe.score(X_test, Y_test))
+print(pipe.predict_proba(X_test))
 print(pipe.predict(X_test))
+
+joblib.dump(pipe, '3classes_pipe.joblib')
+
 
 # pca_2dplot(arr1_offseted, arr2_offseted, figure_num = 100, title_name = "Original")
 # pca_plot(arr1_offseted, arr2_offseted, figure_num = 1, title_name = "Original")

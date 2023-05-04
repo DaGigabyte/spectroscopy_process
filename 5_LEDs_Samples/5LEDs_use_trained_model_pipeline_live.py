@@ -8,6 +8,7 @@ print(ser.name)
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import decomposition, preprocessing, pipeline, svm, model_selection
+import joblib
 
 def interpretSamples(data1, data2):
     X = np.vstack((data1, data2))
@@ -71,23 +72,7 @@ def pca_2dplot(data1, data2, figure_num = 1, title_name = "Default", standard_sc
     # y = np.choose(Y, [1, 2, 0]).astype(float)
     ax.scatter(X[:, 0], X[:, 1], c=Y, edgecolor="k")
 
-arr1 = np.genfromtxt('PET_淳茶舍_5LEDs_vertical.csv', delimiter=',')
-arr1 = np.delete(arr1, 10, 1)
-arr1_offseted = arr1.copy()
-for ar in arr1_offseted:
-    ar -= ar[-1]
-arr2 = np.genfromtxt('PP_unknown_5LEDs_vertical.csv', delimiter=',')
-arr2 = np.delete(arr2, 10, 1)
-arr2_offseted = arr2.copy()
-for ar in arr2_offseted:
-    ar -= ar[-1]
-
-
-X, Y = interpretSamples(arr1_offseted, arr2_offseted)
-X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X, Y, train_size=0.5, random_state=42)
-pipe = pipeline.Pipeline([('scaler', preprocessing.StandardScaler()), ('pca', decomposition.PCA(n_components=2)), ('svc', svm.SVC(gamma='auto', kernel='linear'))])
-pipe.fit(X_train, Y_train)
-print(pipe.score(X_test, Y_test))
+pipe = joblib.load('3classes_pipe.joblib')
 
 # fig, ax = plt.subplots()
 while True:
@@ -95,8 +80,7 @@ while True:
     input_arr = str_data.split("\t")
     num_arr = [n.split(':')[1] for n in input_arr]
     arr = np.array(list(map(float, num_arr)))
-    for ar in arr:
-        ar -= arr[-1]
+    arr = arr[np.array([0, 2, 3, 6, 8])]
     print(pipe.predict(arr.reshape(1,-1)))
     # print(arr)
     # ax.clear()
