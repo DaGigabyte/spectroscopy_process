@@ -1,3 +1,10 @@
+import serial
+portN = "COM7"
+bps = 115200
+timeOut = 5
+ser = serial.Serial(portN, bps, timeout=timeOut)
+print(ser.name)
+
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import decomposition, preprocessing, pipeline, svm, model_selection
@@ -77,11 +84,25 @@ for ar in arr2_offseted:
 
 
 X, Y = interpretSamples(arr1_offseted, arr2_offseted)
-X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X, Y, train_size=0.005, random_state=42)
+X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X, Y, train_size=0.5, random_state=42)
 pipe = pipeline.Pipeline([('scaler', preprocessing.StandardScaler()), ('pca', decomposition.PCA(n_components=2)), ('svc', svm.SVC(gamma='auto', kernel='linear'))])
 pipe.fit(X_train, Y_train)
 print(pipe.score(X_test, Y_test))
-print(pipe.predict(X_test))
+
+# fig, ax = plt.subplots()
+while True:
+    str_data = ser.readline().strip().decode()
+    input_arr = str_data.split("\t")
+    num_arr = [n.split(':')[1] for n in input_arr]
+    arr = np.array(list(map(float, num_arr)))
+    for ar in arr:
+        ar -= arr[-1]
+    print(pipe.predict(arr.reshape(1,-1)))
+    # print(arr)
+    # ax.clear()
+    # ax.set_ylim(0, 2500)
+    # ax.scatter(np.arange(np.shape(arr)[0]), arr)
+    # plt.pause(1e-4)
 
 # pca_2dplot(arr1_offseted, arr2_offseted, figure_num = 100, title_name = "Original")
 # pca_plot(arr1_offseted, arr2_offseted, figure_num = 1, title_name = "Original")

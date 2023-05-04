@@ -65,19 +65,15 @@ def pca_2dplot(data1, data2, figure_num = 1, title_name = "Default", standard_sc
     ax.scatter(X[:, 0], X[:, 1], c=Y, edgecolor="k")
 
 arr1 = np.genfromtxt('PET_淳茶舍_5LEDs_vertical.csv', delimiter=',')
-arr1 = np.delete(arr1, 10, 1)
-arr1_offseted = arr1.copy()
-for ar in arr1_offseted:
-    ar -= ar[-1]
+# arr1_pruned = arr1[:, np.array([1, 4, 5, 7, 8])]
+arr1_pruned = arr1[:, np.array([0, 2, 3, 6, 8])]
 arr2 = np.genfromtxt('PP_unknown_5LEDs_vertical.csv', delimiter=',')
-arr2 = np.delete(arr2, 10, 1)
-arr2_offseted = arr2.copy()
-for ar in arr2_offseted:
-    ar -= ar[-1]
+# arr2_pruned = arr2[:, np.array([1, 4, 5, 7, 8])]
+arr2_pruned = arr2[:, np.array([0, 2, 3, 6, 8])]
 
 
-X, Y = interpretSamples(arr1_offseted, arr2_offseted)
-X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X, Y, train_size=0.005, random_state=42)
+X, Y = interpretSamples(arr1_pruned, arr2_pruned)
+X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X, Y, train_size=0.3, random_state=40)
 pipe = pipeline.Pipeline([('scaler', preprocessing.StandardScaler()), ('pca', decomposition.PCA(n_components=2)), ('svc', svm.SVC(gamma='auto', kernel='linear'))])
 pipe.fit(X_train, Y_train)
 print(pipe.score(X_test, Y_test))
