@@ -1,2 +1,0 @@
-py "plotFromCSV.py" %*
-pause
