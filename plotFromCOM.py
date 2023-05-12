@@ -15,6 +15,7 @@ while True:
     arr = np.array(list(map(float, num_arr)))
     print(arr)
     ax.clear()
-    ax.set_ylim(0, 2500)
+    # ax.set_yscale('log')
+    ax.set_ylim(0, 4000)
     ax.scatter(np.arange(np.shape(arr)[0]), arr)
     plt.pause(1e-4)
