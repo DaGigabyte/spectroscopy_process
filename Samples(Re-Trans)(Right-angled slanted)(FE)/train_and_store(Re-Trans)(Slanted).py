@@ -29,12 +29,12 @@ def dictOfList_as_dataset(my_dict):
     return np.asarray(X), np.asarray(Y)
 
 def EmptyOrNotPipeline(X, Y):
-    pipe = pipeline.Pipeline([('svc', svm.SVC(gamma='auto', kernel='linear')), ])
+    pipe = pipeline.Pipeline([('svc', svm.SVC(gamma='auto', kernel='linear', probability=True)), ])
     pipe.fit(X, Y)
     return pipe
 
 def classifyPipeline(X, Y):
-    pipe = pipeline.Pipeline([('scaler', preprocessing.StandardScaler()), ('pca', decomposition.PCA(n_components=2)), ('svc', svm.SVC(gamma='auto', kernel='linear'))])
+    pipe = pipeline.Pipeline([('scaler', preprocessing.StandardScaler()), ('pca', decomposition.PCA(n_components=2)), ('svc', svm.SVC(gamma='auto', kernel='linear', probability=True))])
     pipe.fit(X, Y)
     return pipe
 
@@ -49,4 +49,4 @@ empty_or_not_pipe = EmptyOrNotPipeline(X, Y_emptyornot)
 X, Y = dictOfList_as_dataset(Re)
 classify_pipe = classifyPipeline(X, Y)
 
-joblib.dump((empty_or_not_pipe, classify_pipe), 'trained_pipes(Re-Trans)(Slanted).joblib')
+joblib.dump((empty_or_not_pipe, classify_pipe), 'trained_pipes(Re-Trans)(Slanted)(proba).joblib')
