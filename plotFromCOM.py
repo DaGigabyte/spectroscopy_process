@@ -33,6 +33,6 @@ while True:
     ax[0].scatter(trans_wavelengths, arr_trans)
     ax[1].clear()
     ax[1].title.set_text('Reflectance')
-    ax[1].set_ylim(0, 4000)
+    ax[1].set_ylim(0, 1000)
     ax[1].scatter(reflectance_wavelengths, arr_reflectance)
     plt.pause(1e-4)
