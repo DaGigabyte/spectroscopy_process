@@ -6,7 +6,7 @@ bps = 115200
 timeOut = 5
 ser = serial.Serial(portN, bps, timeout=timeOut)
 print(ser.name)
-sub_dir = "Samples(Re-Trans)(Right-angled slanted)"
+sub_dir = "Samples(Re-Trans)(Right-angled slanted diffused)"
 try:
     os.mkdir(sub_dir)
 except Exception:
