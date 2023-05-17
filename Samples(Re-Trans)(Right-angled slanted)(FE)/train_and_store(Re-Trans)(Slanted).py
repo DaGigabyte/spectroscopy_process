@@ -41,12 +41,10 @@ def classifyPipeline(X, Y):
 Re_withEmpty = {'Empty': dir_as_dictOfList(Empty_Re_dir), 'PET': dir_as_dictOfList(PET_Re_dir), 'PP': dir_as_dictOfList(PP_Re_dir)}
 Re = {'PET': dir_as_dictOfList(PET_Re_dir), 'PP': dir_as_dictOfList(PP_Re_dir)}
 X, Y = dictOfList_as_dataset(Re_withEmpty)
-Y_emptyornot = np.copy(Y)
-for label in Y_emptyornot:
-    label = 'Empty' if label == 'Empty' else 'Non-Empty'
+Y_emptyornot = np.array(['Empty' if label == 'Empty' else 'Non-Empty' for label in Y])
 empty_or_not_pipe = EmptyOrNotPipeline(X, Y_emptyornot)
 
 X, Y = dictOfList_as_dataset(Re)
 classify_pipe = classifyPipeline(X, Y)
 
-joblib.dump((empty_or_not_pipe, classify_pipe), 'trained_pipes(Re-Trans)(Slanted)(proba).joblib')
+joblib.dump((empty_or_not_pipe, classify_pipe), 'trained_pipes(Re-Trans)(Slanted)(proba)(2).joblib')
