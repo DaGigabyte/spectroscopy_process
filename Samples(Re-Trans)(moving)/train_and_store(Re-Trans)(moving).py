@@ -52,4 +52,4 @@ def dirsToPipe(empty_dir, PET_dir, PP_dir):
 
 Re_empty_or_not_pipe, Re_classify_pipe = dirsToPipe(Empty_Re_dir, PET_Re_dir, PP_Re_dir)
 Trans_empty_or_not_pipe, Trans_classify_pipe = dirsToPipe(Empty_Trans_dir, PET_Trans_dir, PP_Trans_dir)
-# joblib.dump(((Re_empty_or_not_pipe, Re_classify_pipe), (Trans_empty_or_not_pipe, Trans_classify_pipe)), 'trained_pipes(Re-Trans)(Slanted)(proba)(Re-Trans-packed)(unnormalised)(3d)(varying distance).joblib')
+joblib.dump(((Re_empty_or_not_pipe, Re_classify_pipe), (Trans_empty_or_not_pipe, Trans_classify_pipe)), 'trained_pipes(Re-Trans)(Slanted)(proba)(Re-Trans-packed)(unnormalised)(3d)(moving).joblib')
