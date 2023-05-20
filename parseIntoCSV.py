@@ -6,7 +6,7 @@ bps = 115200
 timeOut = 5
 ser = serial.Serial(portN, bps, timeout=timeOut)
 print(ser.name)
-sub_dir = "Samples(Re-Trans)(Right-angled slanted diffused)(moving)"
+sub_dir = "Samples(20-5-2023)(middle)"
 sub_dir_Tr = "Tr"
 sub_dir_Re = "Re"
 try:

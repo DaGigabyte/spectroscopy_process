@@ -1,13 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn import decomposition
-from sklearn import model_selection
+from sklearn import preprocessing, decomposition, model_selection, pipeline
 import glob
 import csv
 import os
 
-PET_dir = "PET_Re"
-PP_dir = "PP_Re"
+PET_dir = "PET_Trans"
+PP_dir = "PP_Trans"
 PET_list = list()
 for filename in os.listdir(PET_dir):
     filename = PET_dir + "\\" + filename
@@ -32,10 +31,30 @@ Y = np.hstack((np.repeat(1, arr1.shape[0]), np.repeat(5, arr2.shape[0])))
 X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X, Y, train_size=0.5, random_state=42)
 
 fig = plt.figure(1, figsize=(4, 3))
-ax = fig.add_subplot(111, projection="3d", elev=48, azim=134)
-pca = decomposition.PCA(n_components=3)
-pca.fit(X_train)
-X_test_transformed = pca.transform(X_test)
+ax0 = fig.add_subplot(122, projection="3d", elev=48, azim=134)
+ax0.title.set_text('Without normalisation')
+pipe0 = pipeline.Pipeline([('pca', decomposition.PCA(n_components=3)), ], verbose=True)
+pipe0.fit(X_train)
+X_test_transformed_by_pipe0 = pipe0.transform(X_test)
+
+for name, label in sample_pair:
+    ax0.text3D(
+        X_test_transformed_by_pipe0[Y_test == label, 0].mean(),
+        X_test_transformed_by_pipe0[Y_test == label, 1].mean() + 1.5,
+        X_test_transformed_by_pipe0[Y_test == label, 2].mean(),
+        name,
+        horizontalalignment="center",
+        bbox=dict(alpha=0.5, edgecolor="w", facecolor="w"),
+    )
+# Reorder the labels to have colors matching the cluster results
+# y = np.choose(Y, [1, 2, 0]).astype(float)
+ax0.scatter(X_test_transformed_by_pipe0[:, 0], X_test_transformed_by_pipe0[:, 1], X_test_transformed_by_pipe0[:, 2], c=Y_test, edgecolor="k")
+
+ax = fig.add_subplot(121, projection="3d", elev=48, azim=134)
+ax.title.set_text('With normalisation')
+pipe = pipeline.Pipeline([('sc', preprocessing.StandardScaler()), ('pca', decomposition.PCA(n_components=3)), ], verbose=True)
+pipe.fit(X_train)
+X_test_transformed = pipe.transform(X_test)
 
 for name, label in sample_pair:
     ax.text3D(
