@@ -12,7 +12,7 @@ PP_Trans_dir = "PP_Trans"
 PET_Re_dir = "PET_Re"
 PP_Re_dir = "PP_Re"
 
-def dir_as_dictOfList(dir):
+def dir_as_list(dir):
     output = list()
     for filename in os.listdir(dir):
         filename = dir + "\\" + filename
@@ -39,8 +39,8 @@ def classifyPipeline(X, Y):
     return pipe
 
 def dirsToPipe(empty_dir, PET_dir, PP_dir):
-    Re_withEmpty = {'Empty': dir_as_dictOfList(empty_dir), 'PET': dir_as_dictOfList(PET_dir), 'PP': dir_as_dictOfList(PP_dir)}
-    Re = {'PET': dir_as_dictOfList(PET_dir), 'PP': dir_as_dictOfList(PP_dir)}
+    Re_withEmpty = {'Empty': dir_as_list(empty_dir), 'PET': dir_as_list(PET_dir), 'PP': dir_as_list(PP_dir)}
+    Re = {'PET': dir_as_list(PET_dir), 'PP': dir_as_list(PP_dir)}
     X, Y = dictOfList_as_dataset(Re_withEmpty)
     Y_emptyornot = np.array(['Empty' if label == 'Empty' else 'Non-Empty' for label in Y])
     print("EmptyOrNotPipeline")
