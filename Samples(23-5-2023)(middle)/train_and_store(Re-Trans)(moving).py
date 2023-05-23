@@ -11,6 +11,9 @@ PET_Trans_dir = "PET_Trans"
 PP_Trans_dir = "PP_Trans"
 PET_Re_dir = "PET_Re"
 PP_Re_dir = "PP_Re"
+Empty_Both_dir = "Empty_Both"
+PET_Both_dir = "PET_Both"
+PP_Both_dir = "PP_Both"
 
 def dir_as_list(dir):
     output = list()
@@ -34,14 +37,13 @@ def EmptyOrNotPipeline(X, Y):
     return pipe
 
 def classifyPipeline(X, Y):
-    pipe = pipeline.Pipeline([('sc', preprocessing.StandardScaler()), ('pca', decomposition.PCA(n_components=3)), ('svc', svm.SVC(gamma='auto', kernel='linear', probability=True))], verbose=True)
+    pipe = pipeline.Pipeline([('sc', preprocessing.StandardScaler()), ('pca', decomposition.PCA(n_components=4)), ('svc', svm.SVC(gamma='auto', kernel='rbf', probability=True))], verbose=True)
     pipe.fit(X, Y)
     return pipe
 
 def dirsToPipe(empty_dir, PET_dir, PP_dir):
     Re_withEmpty = {'Empty': dir_as_list(empty_dir), 'PET': dir_as_list(PET_dir), 'PP': dir_as_list(PP_dir)}
     Re = {'PET': dir_as_list(PET_dir), 'PP': dir_as_list(PP_dir)}
-    print(Re)
     X, Y = dictOfList_as_dataset(Re_withEmpty)
     Y_emptyornot = np.array(['Empty' if label == 'Empty' else 'Non-Empty' for label in Y])
     print("EmptyOrNotPipeline")
@@ -51,6 +53,7 @@ def dirsToPipe(empty_dir, PET_dir, PP_dir):
     classify_pipe = classifyPipeline(X, Y)
     return empty_or_not_pipe, classify_pipe
 
+Both_empty_or_not_pipe, Both_classify_pipe = dirsToPipe(Empty_Both_dir, PET_Both_dir, PP_Both_dir)
 Re_empty_or_not_pipe, Re_classify_pipe = dirsToPipe(Empty_Re_dir, PET_Re_dir, PP_Re_dir)
 Trans_empty_or_not_pipe, Trans_classify_pipe = dirsToPipe(Empty_Trans_dir, PET_Trans_dir, PP_Trans_dir)
-joblib.dump(((Re_empty_or_not_pipe, Re_classify_pipe), (Trans_empty_or_not_pipe, Trans_classify_pipe)), 'trained_pipes(Re-Trans)(Slanted)(proba)(Re-Trans-packed)(unnormalised)(3d)(middle)(2)(with_norm)(float).joblib')
+joblib.dump(((Both_empty_or_not_pipe, Both_classify_pipe), (Re_empty_or_not_pipe, Re_classify_pipe), (Trans_empty_or_not_pipe, Trans_classify_pipe)), 'trained_pipes(23-5-2023)(rbf)(gen4)(PCA4).joblib')
