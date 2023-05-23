@@ -9,7 +9,7 @@ print(ser.name)
 trans_index = np.array([1, 4, 5, 7])
 reflectance_index = np.array([0, 2, 3, 6, 8])
 # (empty_or_not_pipe, classify_pipe) = joblib.load('trained_pipes(Re-Trans)(Slanted)(proba).joblib')
-((Re_empty_or_not_pipe, Re_classify_pipe), (Trans_empty_or_not_pipe, Trans_classify_pipe)) = joblib.load('trained_pipes(Re-Trans)(Slanted)(proba)(Re-Trans-packed)(unnormalised)(3d)(middle)(2)(with_norm).joblib')
+((Re_empty_or_not_pipe, Re_classify_pipe), (Trans_empty_or_not_pipe, Trans_classify_pipe)) = joblib.load('trained_pipes(Re-Trans)(Slanted)(proba)(Re-Trans-packed)(unnormalised)(3d)(middle)(2)(with_norm)(float).joblib')
 
 pipe_containers = dict()
 pipe_containers['Re_empty'] = Re_empty_or_not_pipe
