@@ -6,7 +6,7 @@ bps = 115200
 timeOut = 5
 ser = serial.Serial(portN, bps, timeout=timeOut)
 print(ser.name)
-type_name = "PP_"
+type_name = "PET_"
 sub_dir_Tr = type_name + "Trans"
 sub_dir_Re = type_name + "Re"
 sub_dir_Both = type_name + "Both"

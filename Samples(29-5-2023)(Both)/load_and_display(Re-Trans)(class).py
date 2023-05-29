@@ -15,7 +15,7 @@ turtle.tracer(False)
 trans_index = np.array([1, 4, 5, 7])
 reflectance_index = np.array([0, 2, 3, 6, 8])
 # (empty_or_not_pipe, classify_pipe) = joblib.load('trained_pipes(Re-Trans)(Slanted)(proba).joblib')
-(Both_empty_or_not_pipe, Both_classify_pipe) = joblib.load('trained_pipes(28-5-2023)(Both).joblib')
+(Both_empty_or_not_pipe, Both_classify_pipe) = joblib.load('trained_pipes(29-5-2023)(Both)v7.joblib')
 
 pipe_containers = dict()
 pipe_containers['Both_empty'] = Both_empty_or_not_pipe
@@ -54,6 +54,8 @@ while True:
     else:
         print(classify_prediction, end='\t')
         turtle.clear()
+        if (classify_prediction == 'PP'):
+            classify_prediction = 'non-PET'
         turtle.write(classify_prediction, align='center', font=("Verdana", font_size, "normal"))
     # print(Both_empty_or_not_pipe.predict(arr_both.reshape(1, -1)), Both_classify_pipe.predict(arr_both.reshape(1, -1)), end='\t')
     print(input_arr)
